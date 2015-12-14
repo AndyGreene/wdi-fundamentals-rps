@@ -1,10 +1,14 @@
+// Hi there, gracious person reading my thing. 
+//It all seems to work except... 
+//my getWinner always returns undefined!!
+
 ////////////////////////////////////////////////
 /*   Provided Code - Please Don't Edit   */
 ////////////////////////////////////////////////
 'use strict';
 
 function getInput() {
-    console.log("Please choose either 'rock', 'paper', or 'scissors'.")
+    console.log("Please choose either 'rock', 'paper', or 'scissors'.");
     return prompt();
 }
 function randomPlay() {
@@ -22,25 +26,64 @@ function randomPlay() {
 ////////////////////////////////////////////////
 
 function getPlayerMove(move) {
-    // Write an expression that operates on a variable called `move`
-    // If a `move` has a value, your expression should evaluate to that value.
-    // However, if `move` is not specified / is null, your expression should equal `getInput()`.
-    return /* Your Expression */;
-}
+    return move || getInput();
+    //noticed that getInput adds a "\n" to the end of the input - 
+    //is getWinner reading "rock\n" causing all its outcomes to be undefined?
+    }
 
 function getComputerMove(move) {
-    // Write an expression that operates on a variable called `move`
-    // If a `move` has a value, your expression should evaluate to that value.
-    // However, if `move` is not specified / is null, your expression should equal `randomPlay()`.
-    return /* Your Expression */;
-}
-
+    return move || randomPlay();
+    //and this fucker is always "paper"
+    //because Math.random is always 0.37454011430963874
+    //is this a repl.it thing?
+    }
 function getWinner(playerMove,computerMove) {
     var winner;
-    // Write code that will set winner to either 'player', 'computer', or 'tie' based on the values of playerMove and computerMove.
-    // Assume that the only values playerMove and computerMove can have are 'rock', 'paper', and 'scissors'.
-    // The rules of the game are that 'rock' beats 'scissors', 'scissors' beats 'paper', and 'paper' beats 'rock'.
-    /* YOUR CODE HERE */
+
+    if (playerMove === computerMove){
+        winner = "tie";
+    }
+    
+    else if (playerMove !== "rock" && playerMove !== "paper" && playerMove !== "scissors"){
+        console.log ("that's not a valid input")
+        // return getWinner(getPlayerMove(), getComputerMove())
+        // 
+        // Aha! Why is this always invoked no matter what??
+        
+        // The function works as expected with the expected strings plugged in directly
+        
+        // also works when [ getWinner("rock",getComputerMove()) ] called
+        // (remember that the computer's move is always paper)
+        
+        // There's something fishy about getInput!
+        //
+    }
+
+    else if (playerMove === "rock"){
+        if (computerMove === "paper"){
+            winner = "computer";
+        }
+        else {
+            winner = "player";
+        }
+    }
+    else if (playerMove === "paper"){
+        if (computerMove === "scissors"){
+            winner = "computer";
+        }
+        else {
+            winner = "player";
+        }
+    }
+    else if (playerMove === "scissors"){
+        if (computerMove === "rock"){
+            winner = "computer";
+        }
+        else {
+            winner = "player";
+        }
+    }
+    console.log("Why am I getting ***" + winner + "***???");
     return winner;
 }
 
@@ -48,8 +91,39 @@ function playToFive() {
     console.log("Let's play Rock, Paper, Scissors");
     var playerWins = 0;
     var computerWins = 0;
-    // Write code that plays 'Rock, Paper, Scissors' until either the player or the computer has won five times.
-    /* YOUR CODE HERE */
-    return [playerWins, computerWins];
+    
+    while (playerWins < 5 && computerWins < 5) {
+        
+        var playerMove = getPlayerMove();
+        var computerMove = getComputerMove();
+        
+        console.log ("player chose " +playerMove + " and computer chose " +computerMove);
+        ////////////
+        // and there's that new line in the console.
+        // wait... would the "\n" not register in a real browser window?
+        // is that the problem?
+        // poor predictable computer still always chooses paper...
+        ///////////
+        var winner = getWinner(playerMove, computerMove);
+        
+        if (winner === "player") {
+            playerWins+=1;
+        } 
+        else if (winner === "computer") {
+            computerWins+=1;
+        }
+        else; {
+            playerWins += 66666;
+            computerWins += 0;
+        //////////    
+        //made this increment to show that the while loop is doing its thing
+        /////////
+        }
+        
+        console.log('Winner is ' + winner);
+        console.log('The score is currently ' + playerWins + ' to ' + computerWins + '\n');
+    }
+    
 }
+playToFive();
 
